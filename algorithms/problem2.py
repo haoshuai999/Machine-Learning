@@ -3,16 +3,18 @@ import pandas as pd
 import sys
 
 def calculate_weight(df):
-	n = len(df)
+	df1 = df.loc[:,[0,1]]
+	n = len(df1)
 	alpha = [0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 1]
 	weights = []
 
-	for column in df:
-		mean = df.mean(axis = 0)[column]
-		std = df.std(axis = 0)[column]
+	for column in df1:
+		mean = df1.mean(axis = 0)[column]
+		std = df1.std(axis = 0)[column]
 		for i in range(n):
-			df[column][i] = (df[column][i] - mean) / std
+			df1[column][i] = (df1[column][i] - mean) / std
 
+	df.loc[:,[0,1]] = df1
 
 	for i in range(len(alpha)):
 		beta = [0,0,0]
@@ -39,7 +41,7 @@ def calculate_weight(df):
 			beta[2] -= (alpha[i] / n) * tempbeta[2]
 			#print([R,alpha[i]])
 		if i == 9:
-			while iteration < 116:
+			while iteration < 200:
 				tempR = 0
 				tempbeta = [0,0,0]
 				iteration += 1
